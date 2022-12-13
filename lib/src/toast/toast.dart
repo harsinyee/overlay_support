@@ -32,10 +32,10 @@ void toast(
   }
 
   showOverlay(
-    (context, t) {
+    (context, animation) {
       return IgnorePointer(
-        child: Opacity(
-          opacity: t,
+        child: FadeTransition(
+          opacity: CurveTween(curve: Curves.ease).animate(animation),
           child: _Toast(content: Text(message)),
         ),
       );
