@@ -18,8 +18,12 @@ part 'overlay_entry.dart';
 ///
 /// A simple use case is [TopSlideNotification] in [showOverlayNotification].
 ///
-typedef AnimatedOverlayWidgetBuilder = Widget Function(
-    BuildContext context, double progress);
+typedef Widget AnimatedOverlayWidgetBuilder(
+    BuildContext context, Animation<double> showAnimation);
+
+/// Signature for the builder callback used by [_AnimatedOverlay].
+typedef Widget AnimatedOverlayRemovedWidgetBuilder(
+    BuildContext context, Animation<double> animation);
 
 /// Basic api to show overlay widget.
 ///
@@ -51,7 +55,7 @@ typedef AnimatedOverlayWidgetBuilder = Widget Function(
 ///
 OverlaySupportEntry showOverlay(
   AnimatedOverlayWidgetBuilder builder, {
-  Curve? curve,
+  AnimatedOverlayRemovedWidgetBuilder? removedBuilder,
   Duration? duration,
   Key? key,
   BuildContext? context,
@@ -90,7 +94,7 @@ OverlaySupportEntry showOverlay(
       child: _AnimatedOverlay(
         key: stateKey,
         builder: builder,
-        curve: curve,
+        removedBuilder: removedBuilder,
         animationDuration: animationDuration ?? kNotificationSlideDuration,
         reverseAnimationDuration:
             reverseAnimationDuration ?? kNotificationSlideDuration,
