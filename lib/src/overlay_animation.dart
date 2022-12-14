@@ -13,25 +13,24 @@ class _AnimatedOverlay extends StatefulWidget {
 
   final AnimatedOverlayWidgetBuilder builder;
 
-  final Curve curve;
+  final AnimatedOverlayRemovedWidgetBuilder removedBuilder;
 
   final Key overlayKey;
 
   final OverlaySupportState overlaySupportState;
 
-  _AnimatedOverlay({
-    required Key key,
-    required this.animationDuration,
-    required this.reverseAnimationDuration,
-    Curve? curve,
-    required this.builder,
-    required this.duration,
-    required this.overlayKey,
-    required this.overlaySupportState,
-  })  : curve = curve ?? Curves.easeInOut,
-        assert(animationDuration >= Duration.zero),
-        assert(reverseAnimationDuration >= Duration.zero),
+  _AnimatedOverlay(
+      {required Key key,
+      required this.animationDuration,
+      required this.reverseAnimationDuration,
+      required this.builder,
+      required this.duration,
+      required this.overlayKey,
+      required this.overlaySupportState,
+      AnimatedOverlayRemovedWidgetBuilder? removedBuilder})
+      : assert(reverseAnimationDuration >= Duration.zero),
         assert(duration >= Duration.zero),
+        this.removedBuilder = removedBuilder ?? builder,
         super(key: key);
 
   @override
@@ -97,11 +96,15 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          return widget.builder(
-              context, widget.curve.transform(_controller.value));
-        });
+    switch (_controller.status) {
+      case AnimationStatus.forward:
+      case AnimationStatus.completed:
+        return Builder(
+            builder: (context) => widget.builder(context, _controller));
+      case AnimationStatus.reverse:
+      case AnimationStatus.dismissed:
+        return Builder(
+            builder: (context) => widget.removedBuilder(context, _controller));
+    }
   }
 }
