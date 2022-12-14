@@ -40,7 +40,6 @@ void toast(
         ),
       );
     },
-    curve: Curves.ease,
     key: const ValueKey('overlay_toast'),
     duration: duration,
     context: context,
