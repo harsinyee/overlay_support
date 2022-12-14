@@ -19,7 +19,7 @@ OverlaySupportEntry showOverlayNotification(
 }) {
   duration ??= kNotificationDuration;
   return showOverlay(
-    (context, t) {
+    (context, animation) {
       var alignment = MainAxisAlignment.start;
       if (position == NotificationPosition.bottom) {
         alignment = MainAxisAlignment.end;
@@ -27,9 +27,7 @@ OverlaySupportEntry showOverlayNotification(
       return Column(
         mainAxisAlignment: alignment,
         children: <Widget>[
-          position == NotificationPosition.top
-              ? TopSlideNotification(builder: builder, progress: t)
-              : BottomSlideNotification(builder: builder, progress: t)
+          TopSlideNotification(builder: builder, animation: animation)
         ],
       );
     },
