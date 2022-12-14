@@ -71,6 +71,8 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
   // indicate OverlayEntry is hiding or already remove from Overlay
   bool _dismissScheduled = false;
 
+  bool get dismissScheduled => _dismissScheduled;
+
   // OverlayEntry has been removed from Overlay
   bool _dismissed = false;
 
